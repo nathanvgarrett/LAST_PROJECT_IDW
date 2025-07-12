@@ -37,15 +37,17 @@ function initSlider() {
         document.querySelector('.slides').style.transform = `translateX(-${index * 100}%)`;
     }
 
-    prev.addEventListener('click', () => {
-        currentSlide = (currentSlide === 0) ? slides.length - 1 : currentSlide - 1;
-        showSlide(currentSlide);
-    });
+    if (prev && next) {
+        prev.addEventListener('click', () => {
+            currentSlide = (currentSlide === 0) ? slides.length - 1 : currentSlide - 1;
+            showSlide(currentSlide);
+        });
 
-    next.addEventListener('click', () => {
-        currentSlide = (currentSlide === slides.length - 1) ? 0 : currentSlide + 1;
-        showSlide(currentSlide);
-    });
+        next.addEventListener('click', () => {
+            currentSlide = (currentSlide === slides.length - 1) ? 0 : currentSlide + 1;
+            showSlide(currentSlide);
+        });
+    }
 
     showSlide(currentSlide);
 }
@@ -80,6 +82,24 @@ function validateForm() {
     });
 }
 
+// Termo de Responsabilidade Validation
+function validateTermo() {
+    const termoForm = document.getElementById('termo-form');
+    if (!termoForm) return;
+
+    termoForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const acceptCheckbox = document.getElementById('accept-termo');
+        
+        if (acceptCheckbox.checked) {
+            alert('Termo de responsabilidade aceito com sucesso!');
+        } else {
+            alert('Você deve aceitar o termo de responsabilidade para continuar.');
+        }
+    });
+}
+
 // Image Gallery
 function initGallery() {
     const images = document.querySelectorAll('.gallery-img');
@@ -94,9 +114,20 @@ function initGallery() {
         });
     });
 
-    close.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
+    if (close) {
+        close.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+    }
+
+    // Close modal when clicking outside the image
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
 }
 
 // Initialize
@@ -104,5 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
     startCountdown();
     initSlider();
     validateForm();
+    validateTermo();
     initGallery();
 });
